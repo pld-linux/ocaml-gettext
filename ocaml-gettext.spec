@@ -65,7 +65,7 @@ używających biblioteki gettext.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/{site-lib/{gettext,gettext-camomile,gettext-stub},stublibs}
 
-%{__make} install \
+%{__make} -j1 install \
 	BINDIR=$RPM_BUILD_ROOT%{_bindir} \
 	DOCDIR=$(pwd)/built-docs \
 	MANDIR=$RPM_BUILD_ROOT%{_mandir} \
