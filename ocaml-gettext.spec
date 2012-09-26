@@ -58,7 +58,8 @@ używających biblioteki gettext.
 %configure \
 	--with-docbook-stylesheet=/usr/share/sgml/docbook/xsl-stylesheets
 
-%{__make}
+# build is racy
+%{__make} -j1
 
 %install
 rm -rf $RPM_BUILD_ROOT
