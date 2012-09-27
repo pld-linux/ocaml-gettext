@@ -72,7 +72,6 @@ install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/{site-lib/{gettext,gettext-camomile,g
 	OCAMLFIND_DESTDIR=$RPM_BUILD_ROOT%{_libdir}/ocaml \
 	PODIR=$RPM_BUILD_ROOT%{_localedir}
 
-#mv -f $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext-stub/dll*.so $RPM_BUILD_ROOT%{_libdir}/ocaml/stublibs
 mv -f $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext/META $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext
 mv -f $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext-camomile/META $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext-camomile
 mv -f $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext-stub/META $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext-stub
