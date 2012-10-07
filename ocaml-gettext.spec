@@ -1,4 +1,3 @@
-# $Revision: 1.5 $, $Date: 2011/07/23 06:35:45 $
 Summary:	OCaml gettext library
 Summary(pl.UTF-8):	Biblioteka gettext dla OCamla
 Name:		ocaml-gettext
