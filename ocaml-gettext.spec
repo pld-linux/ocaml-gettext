@@ -2,7 +2,7 @@ Summary:	OCaml gettext library
 Summary(pl.UTF-8):	Biblioteka gettext dla OCamla
 Name:		ocaml-gettext
 Version:	0.3.4
-Release:	1
+Release:	2
 License:	LGPL v2 with linking exception
 Group:		Libraries
 Source0:	http://forge.ocamlcore.org/frs/download.php/676/%{name}-%{version}.tar.gz
