@@ -1,8 +1,23 @@
+#
+# Conditional build:
+%bcond_without	ocaml_opt	# skip building native optimized binaries (bytecode is always built)
+
+%ifarch x32
+# not yet available on x32 (ocaml 4.02.1), remove when upstream will support it
+%undefine	with_ocaml_opt
+%endif
+
+%if %{without ocaml_opt}
+%define		no_install_post_strip	1
+# no opt means no native binary, stripping bytecode breaks such programs
+%define		_enable_debug_packages	0
+%endif
+
 Summary:	OCaml gettext library
 Summary(pl.UTF-8):	Biblioteka gettext dla OCamla
 Name:		ocaml-gettext
 Version:	0.3.5
-Release:	1
+Release:	2
 License:	LGPL v2 with linking exception
 Group:		Libraries
 Source0:	http://forge.ocamlcore.org/frs/download.php/1433/%{name}-%{version}.tar.gz
@@ -109,17 +124,19 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/ocaml-gettext
 %attr(755,root,root) %{_bindir}/ocaml-xgettext
 %dir %{_libdir}/ocaml/gettext
-%{_libdir}/ocaml/gettext/gettextBase.a
-%{_libdir}/ocaml/gettext/gettextExtension.a
 %{_libdir}/ocaml/gettext/gettext*.cm[ixa]*
 %{_libdir}/ocaml/gettext/pr_gettext.cmo
 %dir %{_libdir}/ocaml/gettext-camomile
-%{_libdir}/ocaml/gettext-camomile/gettextCamomile.a
 %{_libdir}/ocaml/gettext-camomile/gettextCamomile.cm[ixa]*
 %dir %{_libdir}/ocaml/gettext-stub
-%{_libdir}/ocaml/gettext-stub/gettextStub.a
 %{_libdir}/ocaml/gettext-stub/gettextStub*.cm[ixa]*
+%if %{with ocaml_opt}
+%{_libdir}/ocaml/gettext/gettextBase.a
+%{_libdir}/ocaml/gettext/gettextExtension.a
+%{_libdir}/ocaml/gettext-camomile/gettextCamomile.a
+%{_libdir}/ocaml/gettext-stub/gettextStub.a
 %{_libdir}/ocaml/gettext-stub/gettextStubCompat_stubs.o
+%endif
 %{_libdir}/ocaml/gettext-stub/libgettextStub.a
 %{_libdir}/ocaml/site-lib/gettext
 %{_libdir}/ocaml/site-lib/gettext-camomile
