@@ -2,22 +2,16 @@
 # Conditional build:
 %bcond_without	ocaml_opt	# skip building native optimized binaries (bytecode is always built)
 
-%ifarch x32
-# not yet available on x32 (ocaml 4.02.1), remove when upstream will support it
+# not yet available on x32 (ocaml 4.02.1), update when upstream will support it
+%ifnarch %{ix86} %{x8664} arm aarch64 ppc sparc sparcv9
 %undefine	with_ocaml_opt
-%endif
-
-%if %{without ocaml_opt}
-%define		no_install_post_strip	1
-# no opt means no native binary, stripping bytecode breaks such programs
-%define		_enable_debug_packages	0
 %endif
 
 Summary:	OCaml gettext library
 Summary(pl.UTF-8):	Biblioteka gettext dla OCamla
 Name:		ocaml-gettext
 Version:	0.3.5
-Release:	2
+Release:	3
 License:	LGPL v2 with linking exception
 Group:		Libraries
 Source0:	http://forge.ocamlcore.org/frs/download.php/1433/%{name}-%{version}.tar.gz
@@ -30,11 +24,17 @@ BuildRequires:	libxslt-progs
 BuildRequires:	ocaml >= 3.04-7
 BuildRequires:	ocaml-camlp4
 BuildRequires:	ocaml-camomile-devel
-BuildRequires:	ocaml-fileutils-devel
+BuildRequires:	ocaml-fileutils >= 0.4.5-4
 BuildRequires:	ocaml-ounit
 %requires_eq	ocaml-runtime
 Requires:	ocaml-camomile
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%if %{without ocaml_opt}
+%define		no_install_post_strip	1
+# no opt means no native binary, stripping bytecode breaks such programs
+%define		_enable_debug_packages	0
+%endif
 
 %description
 This library is a wrapper around gettext, it also provides a pure
@@ -102,6 +102,8 @@ EOF
 install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 cp -r examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
+# findlib-specific, useless when packaging in rpm
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/ocaml/stublibs/dllgettextStub.so.owner
 # packaged as %doc
 %{__rm} $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext*/*.mli
 # why installed?
@@ -116,7 +118,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc CHANGELOG README THANKS TODO
 %attr(755,root,root) %{_libdir}/ocaml/stublibs/dllgettextStub.so
-%{_libdir}/ocaml/stublibs/dllgettextStub.so.owner
 
 %files devel
 %defattr(644,root,root,755)
@@ -124,16 +125,19 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/ocaml-gettext
 %attr(755,root,root) %{_bindir}/ocaml-xgettext
 %dir %{_libdir}/ocaml/gettext
-%{_libdir}/ocaml/gettext/gettext*.cm[ixa]*
+%{_libdir}/ocaml/gettext/gettext*.cm[ia]
 %{_libdir}/ocaml/gettext/pr_gettext.cmo
 %dir %{_libdir}/ocaml/gettext-camomile
-%{_libdir}/ocaml/gettext-camomile/gettextCamomile.cm[ixa]*
+%{_libdir}/ocaml/gettext-camomile/gettextCamomile.cm[ia]
 %dir %{_libdir}/ocaml/gettext-stub
-%{_libdir}/ocaml/gettext-stub/gettextStub*.cm[ixa]*
+%{_libdir}/ocaml/gettext-stub/gettextStub*.cm[ia]
 %if %{with ocaml_opt}
+%{_libdir}/ocaml/gettext/gettext*.cmx*
 %{_libdir}/ocaml/gettext/gettextBase.a
 %{_libdir}/ocaml/gettext/gettextExtension.a
+%{_libdir}/ocaml/gettext-camomile/gettextCamomile.cmx*
 %{_libdir}/ocaml/gettext-camomile/gettextCamomile.a
+%{_libdir}/ocaml/gettext-stub/gettextStub*.cmx*
 %{_libdir}/ocaml/gettext-stub/gettextStub.a
 %{_libdir}/ocaml/gettext-stub/gettextStubCompat_stubs.o
 %endif
