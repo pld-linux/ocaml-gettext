@@ -24,7 +24,7 @@ BuildRequires:	libxslt-progs
 BuildRequires:	ocaml >= 3.04-7
 BuildRequires:	ocaml-camlp4
 BuildRequires:	ocaml-camomile-devel
-BuildRequires:	ocaml-fileutils >= 0.4.5-4
+BuildRequires:	ocaml-fileutils-devel
 BuildRequires:	ocaml-ounit
 %requires_eq	ocaml-runtime
 Requires:	ocaml-camomile
