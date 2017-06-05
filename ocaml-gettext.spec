@@ -10,12 +10,12 @@
 Summary:	OCaml gettext library
 Summary(pl.UTF-8):	Biblioteka gettext dla OCamla
 Name:		ocaml-gettext
-Version:	0.3.5
-Release:	5
+Version:	0.3.7
+Release:	1
 License:	LGPL v2 with linking exception
 Group:		Libraries
-Source0:	http://forge.ocamlcore.org/frs/download.php/1433/%{name}-%{version}.tar.gz
-# Source0-md5:	3c3c5156578104819b486584aa14f807
+Source0:	http://forge.ocamlcore.org/frs/download.php/1678/%{name}-%{version}.tar.gz
+# Source0-md5:	63349846b7456b1be23737e4a2c6bad7
 URL:		http://forge.ocamlcore.org/projects/ocaml-gettext
 BuildRequires:	docbook-dtd43-xml
 BuildRequires:	docbook-style-xsl
@@ -25,6 +25,7 @@ BuildRequires:	ocaml >= 3.04-7
 BuildRequires:	ocaml-camlp4
 BuildRequires:	ocaml-camomile-devel
 BuildRequires:	ocaml-fileutils-devel
+BuildRequires:	ocaml-findlib-devel
 BuildRequires:	ocaml-ounit
 %requires_eq	ocaml-runtime
 Requires:	ocaml-camomile
