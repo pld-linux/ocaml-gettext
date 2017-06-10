@@ -3,7 +3,7 @@
 %bcond_without	ocaml_opt	# skip building native optimized binaries (bytecode is always built)
 
 # not yet available on x32 (ocaml 4.02.1), update when upstream will support it
-%ifnarch %{ix86} %{x8664} arm aarch64 ppc sparc sparcv9
+%ifnarch %{ix86} %{x8664} %{arm} aarch64 ppc sparc sparcv9
 %undefine	with_ocaml_opt
 %endif
 
@@ -25,7 +25,7 @@ BuildRequires:	ocaml >= 3.04-7
 BuildRequires:	ocaml-camlp4
 BuildRequires:	ocaml-camomile-devel
 BuildRequires:	ocaml-fileutils-devel
-BuildRequires:	ocaml-findlib-devel
+BuildRequires:	ocaml-findlib
 BuildRequires:	ocaml-ounit
 %requires_eq	ocaml-runtime
 Requires:	ocaml-camomile
@@ -87,9 +87,9 @@ install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/{site-lib/{gettext,gettext-camomile,g
 	OCAMLFIND_DESTDIR=$RPM_BUILD_ROOT%{_libdir}/ocaml \
 	PODIR=$RPM_BUILD_ROOT%{_localedir}
 
-mv -f $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext/META $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext
-mv -f $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext-camomile/META $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext-camomile
-mv -f $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext-stub/META $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext-stub
+%{__mv} $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext/META $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext
+%{__mv} $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext-camomile/META $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext-camomile
+%{__mv} $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext-stub/META $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext-stub
 cat >>$RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext/META <<EOF
 directory="+gettext"
 EOF
