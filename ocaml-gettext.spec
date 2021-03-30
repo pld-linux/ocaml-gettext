@@ -10,12 +10,12 @@
 Summary:	OCaml gettext library
 Summary(pl.UTF-8):	Biblioteka gettext dla OCamla
 Name:		ocaml-gettext
-Version:	0.3.7
+Version:	0.4.2
 Release:	1
 License:	LGPL v2 with linking exception
 Group:		Libraries
-Source0:	http://forge.ocamlcore.org/frs/download.php/1678/%{name}-%{version}.tar.gz
-# Source0-md5:	63349846b7456b1be23737e4a2c6bad7
+Source0:	https://github.com/gildor478/ocaml-gettext/archive/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	d277c08ceab22404f01fbdbc74d5c747
 URL:		http://forge.ocamlcore.org/projects/ocaml-gettext
 BuildRequires:	docbook-dtd43-xml
 BuildRequires:	docbook-style-xsl
@@ -26,7 +26,6 @@ BuildRequires:	ocaml-camlp4
 BuildRequires:	ocaml-camomile-devel
 BuildRequires:	ocaml-fileutils-devel
 BuildRequires:	ocaml-findlib
-BuildRequires:	ocaml-ounit
 %requires_eq	ocaml-runtime
 Requires:	ocaml-camomile
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -56,7 +55,7 @@ Summary:	OCaml gettext library - development part
 Summary(pl.UTF-8):	Biblioteka gettext dla OCamla - cześć programistyczna
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-%requires_eq	ocaml
+%requires_eq ocaml
 
 %description devel
 This package contains files needed to develop OCaml programs using
@@ -70,82 +69,87 @@ używających biblioteki gettext.
 %setup -q
 
 %build
-%configure \
-	--with-docbook-stylesheet=/usr/share/sgml/docbook/xsl-stylesheets
-
-# build is racy
-%{__make} -j1
+dune build --verbose
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_libdir}/ocaml/{site-lib/{gettext,gettext-camomile,gettext-stub},stublibs}
 
-%{__make} -j1 install \
-	BINDIR=$RPM_BUILD_ROOT%{_bindir} \
-	DOCDIR=$(pwd)/built-docs \
-	MANDIR=$RPM_BUILD_ROOT%{_mandir} \
-	OCAMLFIND_DESTDIR=$RPM_BUILD_ROOT%{_libdir}/ocaml \
-	PODIR=$RPM_BUILD_ROOT%{_localedir}
-
-%{__mv} $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext/META $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext
-%{__mv} $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext-camomile/META $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext-camomile
-%{__mv} $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext-stub/META $RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext-stub
-cat >>$RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext/META <<EOF
-directory="+gettext"
-EOF
-cat >>$RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext-camomile/META <<EOF
-directory="+gettext-camomile"
-EOF
-cat >>$RPM_BUILD_ROOT%{_libdir}/ocaml/site-lib/gettext-stub/META <<EOF
-directory="+gettext-stub"
-EOF
+dune install --destdir=$RPM_BUILD_ROOT
 
 install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 cp -r examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
-# findlib-specific, useless when packaging in rpm
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/ocaml/stublibs/dllgettextStub.so.owner
-# packaged as %doc
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext*/*.mli
-# why installed?
-%{__rm} $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext*/*.ml
-
-%find_lang %{name}
-
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%files -f %{name}.lang
+%files
 %defattr(644,root,root,755)
-%doc CHANGELOG README THANKS TODO
-%attr(755,root,root) %{_libdir}/ocaml/stublibs/dllgettextStub.so
+%doc CHANGES.md README.md TODO.md
+%dir %{_libdir}/ocaml/gettext
+%{_libdir}/ocaml/gettext/META
+%{_libdir}/ocaml/gettext/*.cma
+%attr(755,root,root) %{_libdir}/ocaml/stublibs/dllgettextStub_stubs.so
+%dir %{_libdir}/ocaml/gettext-camomile
+%{_libdir}/ocaml/gettext-camomile/META
+%{_libdir}/ocaml/gettext-camomile/*.cma
+%dir %{_libdir}/ocaml/gettext-stub
+%{_libdir}/ocaml/gettext-stub/META
+%{_libdir}/ocaml/gettext-stub/*.cma
+%dir %{_libdir}/ocaml/gettext/base
+%{_libdir}/ocaml/gettext/base/*.cma
+%dir %{_libdir}/ocaml/gettext/extension
+%{_libdir}/ocaml/gettext/extension/*.cma
+%if %{with ocaml_opt}
+%attr(755,root,root) %{_libdir}/ocaml/gettext/*.cmxs
+%attr(755,root,root) %{_libdir}/ocaml/gettext/base/*.cmxs
+%attr(755,root,root) %{_libdir}/ocaml/gettext/extension/*.cmxs
+%attr(755,root,root) %{_libdir}/ocaml/gettext-camomile/*.cmxs
+%attr(755,root,root) %{_libdir}/ocaml/gettext-stub/*.cmxs
+%endif
 
 %files devel
 %defattr(644,root,root,755)
-%doc libgettext-ocaml/{gettext,gettextCompat}.mli libgettext-camomile-ocaml/gettextCamomile.mli built-docs/html/*
 %attr(755,root,root) %{_bindir}/ocaml-gettext
 %attr(755,root,root) %{_bindir}/ocaml-xgettext
-%dir %{_libdir}/ocaml/gettext
-%{_libdir}/ocaml/gettext/gettext*.cm[ia]
-%{_libdir}/ocaml/gettext/pr_gettext.cmo
-%dir %{_libdir}/ocaml/gettext-camomile
-%{_libdir}/ocaml/gettext-camomile/gettextCamomile.cm[ia]
+%{_libdir}/ocaml/gettext/*.cmxa
+%{_libdir}/ocaml/gettext/base/*.cmi
+%{_libdir}/ocaml/gettext/base/*.cmt
+%{_libdir}/ocaml/gettext/base/*.cmti
+%{_libdir}/ocaml/gettext/base/*.cmxa
+%{_libdir}/ocaml/gettext/base/*.mli
+%{_libdir}/ocaml/gettext/base/.private
+%{_libdir}/ocaml/gettext/extension/*.cmi
+%{_libdir}/ocaml/gettext/extension/*.cmt
+%{_libdir}/ocaml/gettext/extension/*.cmxa
+%{_libdir}/ocaml/gettext/extension/*.mli
+%{_libdir}/ocaml/gettext/extension/.private/*.cmi
+%{_libdir}/ocaml/gettext/extension/.private/*.cmt
+%{_libdir}/ocaml/gettext/extension/.private/*.cmti
+%{_libdir}/ocaml/gettext-camomile/*.cmi
+%{_libdir}/ocaml/gettext-camomile/*.cmxa
+%{_libdir}/ocaml/gettext-camomile/*.cmt
+%{_libdir}/ocaml/gettext-camomile/*.cmti
+%{_libdir}/ocaml/gettext-camomile/*.mli
+%{_libdir}/ocaml/gettext-camomile/dune-package
+%{_libdir}/ocaml/gettext-camomile/opam
+%{_libdir}/ocaml/gettext-stub/*.cmt
+%{_libdir}/ocaml/gettext-stub/*.cmxa
+%{_libdir}/ocaml/gettext-stub/dune-package
+%{_libdir}/ocaml/gettext-stub/opam
 %dir %{_libdir}/ocaml/gettext-stub
-%{_libdir}/ocaml/gettext-stub/gettextStub*.cm[ia]
+%{_libdir}/ocaml/gettext-stub/*.cmi
 %if %{with ocaml_opt}
-%{_libdir}/ocaml/gettext/gettext*.cmx*
-%{_libdir}/ocaml/gettext/gettextBase.a
-%{_libdir}/ocaml/gettext/gettextExtension.a
-%{_libdir}/ocaml/gettext-camomile/gettextCamomile.cmx*
-%{_libdir}/ocaml/gettext-camomile/gettextCamomile.a
-%{_libdir}/ocaml/gettext-stub/gettextStub*.cmx*
-%{_libdir}/ocaml/gettext-stub/gettextStub.a
-%{_libdir}/ocaml/gettext-stub/gettextStubCompat_stubs.o
+%{_libdir}/ocaml/gettext/base/*.a
+%{_libdir}/ocaml/gettext/base/*.cmx
+%{_libdir}/ocaml/gettext/extension/*.a
+%{_libdir}/ocaml/gettext/extension/*.cmx
+%{_libdir}/ocaml/gettext-camomile/*.cmx
+%{_libdir}/ocaml/gettext-camomile/*.a
+%{_libdir}/ocaml/gettext-stub/*.a
+%{_libdir}/ocaml/gettext-stub/*.cmx
 %endif
-%{_libdir}/ocaml/gettext-stub/libgettextStub.a
-%{_libdir}/ocaml/site-lib/gettext
-%{_libdir}/ocaml/site-lib/gettext-camomile
-%{_libdir}/ocaml/site-lib/gettext-stub
+%{_libdir}/ocaml/gettext/dune-package
+%{_libdir}/ocaml/gettext/opam
 %{_examplesdir}/%{name}-%{version}
 %{_mandir}/man1/ocaml-gettext.1*
 %{_mandir}/man1/ocaml-xgettext.1*
