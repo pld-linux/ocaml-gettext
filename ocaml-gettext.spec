@@ -17,6 +17,7 @@ Group:		Libraries
 Source0:	https://github.com/gildor478/ocaml-gettext/archive/v%{version}/%{name}-%{version}.tar.gz
 # Source0-md5:	d277c08ceab22404f01fbdbc74d5c747
 URL:		http://forge.ocamlcore.org/projects/ocaml-gettext
+BuildRequires:	cppo
 BuildRequires:	docbook-dtd43-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	libxml2-progs
@@ -111,42 +112,43 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/ocaml-gettext
 %attr(755,root,root) %{_bindir}/ocaml-xgettext
-%{_libdir}/ocaml/gettext/*.cmxa
 %{_libdir}/ocaml/gettext/base/*.cmi
 %{_libdir}/ocaml/gettext/base/*.cmt
 %{_libdir}/ocaml/gettext/base/*.cmti
-%{_libdir}/ocaml/gettext/base/*.cmxa
 %{_libdir}/ocaml/gettext/base/*.mli
 %{_libdir}/ocaml/gettext/base/.private
 %{_libdir}/ocaml/gettext/extension/*.cmi
 %{_libdir}/ocaml/gettext/extension/*.cmt
-%{_libdir}/ocaml/gettext/extension/*.cmxa
 %{_libdir}/ocaml/gettext/extension/*.mli
 %{_libdir}/ocaml/gettext/extension/.private/*.cmi
 %{_libdir}/ocaml/gettext/extension/.private/*.cmt
 %{_libdir}/ocaml/gettext/extension/.private/*.cmti
 %{_libdir}/ocaml/gettext-camomile/*.cmi
-%{_libdir}/ocaml/gettext-camomile/*.cmxa
 %{_libdir}/ocaml/gettext-camomile/*.cmt
 %{_libdir}/ocaml/gettext-camomile/*.cmti
 %{_libdir}/ocaml/gettext-camomile/*.mli
 %{_libdir}/ocaml/gettext-camomile/dune-package
 %{_libdir}/ocaml/gettext-camomile/opam
 %{_libdir}/ocaml/gettext-stub/*.cmt
-%{_libdir}/ocaml/gettext-stub/*.cmxa
 %{_libdir}/ocaml/gettext-stub/dune-package
 %{_libdir}/ocaml/gettext-stub/opam
 %dir %{_libdir}/ocaml/gettext-stub
 %{_libdir}/ocaml/gettext-stub/*.cmi
+%{_libdir}/ocaml/gettext-stub/libgettextStub_stubs.a
 %if %{with ocaml_opt}
 %{_libdir}/ocaml/gettext/base/*.a
 %{_libdir}/ocaml/gettext/base/*.cmx
+%{_libdir}/ocaml/gettext/base/*.cmxa
+%{_libdir}/ocaml/gettext-camomile/*.a
+%{_libdir}/ocaml/gettext-camomile/*.cmx
+%{_libdir}/ocaml/gettext-camomile/*.cmxa
+%{_libdir}/ocaml/gettext/*.cmxa
 %{_libdir}/ocaml/gettext/extension/*.a
 %{_libdir}/ocaml/gettext/extension/*.cmx
-%{_libdir}/ocaml/gettext-camomile/*.cmx
-%{_libdir}/ocaml/gettext-camomile/*.a
-%{_libdir}/ocaml/gettext-stub/*.a
+%{_libdir}/ocaml/gettext/extension/*.cmxa
+%{_libdir}/ocaml/gettext-stub/gettextStub.a
 %{_libdir}/ocaml/gettext-stub/*.cmx
+%{_libdir}/ocaml/gettext-stub/*.cmxa
 %endif
 %{_libdir}/ocaml/gettext/dune-package
 %{_libdir}/ocaml/gettext/opam
