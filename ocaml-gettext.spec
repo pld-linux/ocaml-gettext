@@ -11,7 +11,7 @@ Summary:	OCaml gettext library
 Summary(pl.UTF-8):	Biblioteka gettext dla OCamla
 Name:		ocaml-gettext
 Version:	0.4.2
-Release:	1
+Release:	2
 License:	LGPL v2 with linking exception
 Group:		Libraries
 Source0:	https://github.com/gildor478/ocaml-gettext/archive/v%{version}/%{name}-%{version}.tar.gz
@@ -120,9 +120,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/ocaml/gettext/extension/*.cmi
 %{_libdir}/ocaml/gettext/extension/*.cmt
 %{_libdir}/ocaml/gettext/extension/*.mli
-%{_libdir}/ocaml/gettext/extension/.private/*.cmi
-%{_libdir}/ocaml/gettext/extension/.private/*.cmt
-%{_libdir}/ocaml/gettext/extension/.private/*.cmti
+%{_libdir}/ocaml/gettext/extension/.private
 %{_libdir}/ocaml/gettext-camomile/*.cmi
 %{_libdir}/ocaml/gettext-camomile/*.cmt
 %{_libdir}/ocaml/gettext-camomile/*.cmti
