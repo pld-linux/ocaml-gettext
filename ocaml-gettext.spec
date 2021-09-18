@@ -14,17 +14,18 @@ Version:	0.4.2
 Release:	2
 License:	LGPL v2 with linking exception
 Group:		Libraries
+#Source0Download: https://github.com/gildor478/ocaml-gettext/releases
 Source0:	https://github.com/gildor478/ocaml-gettext/archive/v%{version}/%{name}-%{version}.tar.gz
 # Source0-md5:	d277c08ceab22404f01fbdbc74d5c747
-URL:		http://forge.ocamlcore.org/projects/ocaml-gettext
-BuildRequires:	cppo
+URL:		https://github.com/gildor478/ocaml-gettext
+BuildRequires:	cppo >= 1.4.0
 BuildRequires:	docbook-dtd43-xml
 BuildRequires:	docbook-style-xsl
 BuildRequires:	libxml2-progs
 BuildRequires:	libxslt-progs
-BuildRequires:	ocaml >= 3.04-7
-BuildRequires:	ocaml-camlp4
+BuildRequires:	ocaml >= 1:4.03.0
 BuildRequires:	ocaml-camomile-devel
+BuildRequires:	ocaml-dune-devel >= 1.11.0
 BuildRequires:	ocaml-fileutils-devel
 BuildRequires:	ocaml-findlib
 %requires_eq	ocaml-runtime
@@ -56,7 +57,7 @@ Summary:	OCaml gettext library - development part
 Summary(pl.UTF-8):	Biblioteka gettext dla OCamla - cześć programistyczna
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-%requires_eq ocaml
+%requires_eq	ocaml
 
 %description devel
 This package contains files needed to develop OCaml programs using
@@ -80,12 +81,18 @@ dune install --destdir=$RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 cp -r examples/* $RPM_BUILD_ROOT%{_examplesdir}/%{name}-%{version}
 
+# sources
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext/{base,extension}/*.ml
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/ocaml/gettext-{camomile,stub}/*.ml
+# packaged as %doc
+%{__rm} -r $RPM_BUILD_ROOT%{_prefix}/doc/{gettext,gettext-camomile,gettext-stub}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc CHANGES.md README.md TODO.md
+%doc CHANGES.md LICENSE.txt README.md THANKS TODO.md
 %dir %{_libdir}/ocaml/gettext
 %{_libdir}/ocaml/gettext/META
 %{_libdir}/ocaml/gettext/*.cma
