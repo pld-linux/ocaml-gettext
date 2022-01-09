@@ -54,7 +54,7 @@ używających biblioteki gettext.
 
 %package devel
 Summary:	OCaml gettext library - development part
-Summary(pl.UTF-8):	Biblioteka gettext dla OCamla - cześć programistyczna
+Summary(pl.UTF-8):	Biblioteka gettext dla OCamla - część programistyczna
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 %requires_eq	ocaml
